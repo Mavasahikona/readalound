@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header id="hero">
+    <div class="title">
+      <h1>Sentence Reader</h1>
+      <span id="status">Idle</span>
+    </div>
+    <div class="transport">
+      <button id="prev" title="Previous sentence"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM20 6v12L9.5 12z"/></svg></button>
+      <button id="play" class="primary" title="Read / pause"><svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      <button id="next" title="Next sentence"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM4 6v12l10.5-6z"/></svg></button>
+      <button id="stop" title="Stop"><svg viewBox="0 0 24 24"><path d="M7 7h10v10H7z"/></svg></button>
+    </div>
+  </header>
+
+  <main>
+    <h2>Voice</h2>
+    <label>Engine
+      <select id="engine">
+        <option value="kokoroWeb">Kokoro – built in (free, nothing to install)</option>
+        <option value="azure">Azure Neural – Microsoft cloud voices</option>
+        <option value="kokoro">Kokoro – my own local server (Docker)</option>
+        <option value="browser">Browser built-in voices</option>
+      </select>
+    </label>
+
+    <section id="kokoroWebBox">
+      <label>Voice
+        <span class="row">
+          <select id="kokoroWebVoice"></select>
+          <button id="kokoroWebPreview" class="btn small" title="Preview this voice">▶</button>
+        </span>
+      </label>
+      <label>Run on
+        <select id="kokoroWebDevice">
+          <option value="auto">Auto – graphics card if available (fastest)</option>
+          <option value="wasm">CPU only – for PCs without a usable graphics card</option>
+        </select>
+      </label>
+      <div class="model">
+        <div class="bar"><i id="kwBar"></i></div>
+        <p id="kwMsg" class="msg"></p>
+        <button id="kwLoad" class="btn ghost">Download voices now</button>
+      </div>
+    </section>
+
+    <section id="azureBox">
+      <label>Azure Speech key
+        <input type="password" id="azureKey" placeholder="Paste key 1 or key 2" autocomplete="off">
+      </label>
+      <label>Region
+        <input list="regions" id="azureRegion" placeholder="e.g. westeurope" autocomplete="off">
+      </label>
+      <datalist id="regions">
+        <option value="southafricanorth"><option value="westeurope"><option value="northeurope">
+        <option value="uksouth"><option value="francecentral"><option value="germanywestcentral">
+        <option value="swedencentral"><option value="eastus"><option value="eastus2">
+        <option value="westus2"><option value="westus3"><option value="centralus">
+        <option value="canadacentral"><option value="brazilsouth"><option value="uaenorth">
+        <option value="centralindia"><option value="southeastasia"><option value="eastasia">
+        <option value="japaneast"><option value="koreacentral"><option value="australiaeast">
+      </datalist>
+      <button id="azureSave" class="btn">Save &amp; load voices</button>
+      <p id="azureMsg" class="msg"></p>
+      <label>Neural voice
+        <span class="row">
+          <select id="azureVoice"></select>
+          <button id="preview" class="btn small" title="Preview this voice">▶</button>
+        </span>
+      </label>
+    </section>
+
+    <section id="kokoroBox">
+      <label>Kokoro server
+        <input type="text" id="kokoroUrl" placeholder="http://localhost:8880" autocomplete="off" spellcheck="false">
+      </label>
+      <button id="kokoroSave" class="btn">Connect &amp; load voices</button>
+      <p id="kokoroMsg" class="msg"></p>
+      <label>Kokoro voice
+        <span class="row">
+          <select id="kokoroVoice"></select>
+          <button id="kokoroPreview" class="btn small" title="Preview this voice">▶</button>
+        </span>
+      </label>
+    </section>
+
+    <section id="browserBox">
+      <label>Voice
+        <select id="voice"></select>
+      </label>
+      <p id="browserHint" class="msg"></p>
+    </section>
+
+    <label>Speed
+      <span class="slider"><input type="range" id="rate" min="0.5" max="2" step="0.1"><output id="rateOut"></output></span>
+    </label>
+    <label id="pitchRow">Pitch
+      <span class="slider"><input type="range" id="pitch" min="0.5" max="2" step="0.1"><output id="pitchOut"></output></span>
+    </label>
+    <label>Volume
+      <span class="slider"><input type="range" id="volume" min="0" max="1" step="0.05"><output id="volumeOut"></output></span>
+    </label>
+
+    <h2>Look</h2>
+    <div id="themes" class="themes"></div>
+    <label>Highlight colours
+      <span class="row">
+        <select id="palette"></select>
+        <input type="color" id="customColor">
+      </span>
+    </label>
+    <div id="swatches"></div>
+
+    <div class="checks">
+      <label class="check"><input type="checkbox" id="island"> Always show the floating island</label>
+      <label class="check"><input type="checkbox" id="jj"> Double-tap <kbd>J</kbd> to start reading</label>
+    </div>
+    <button id="readPage" class="btn wide">Read whole page from top of screen</button>
+
+    <p class="hint">Click the island or press <kbd>J</kbd><kbd>J</kbd>, then highlight what you want read. It starts automatically (Enter starts at once, Esc cancels). Shortcut: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd></p>
+  </main>
+
+  <script src="shared.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
